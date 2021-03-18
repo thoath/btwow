@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
 @FeignClient(url = "${swapi.url}/planets", name = "SWApi")
-public interface SWPlanetsApi {
+public interface SWPlanetsApiClient {
 
     @GetMapping("/?search={planet}")
     Optional<SWApiResponseDto> getPlanet(@PathVariable("planet") String planet);

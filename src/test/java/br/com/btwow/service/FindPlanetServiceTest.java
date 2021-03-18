@@ -1,77 +1,78 @@
 package br.com.btwow.service;
 
+import static org.mockito.Mockito.*;
+
+import br.com.btwow.dto.PlanetDto;
+import br.com.btwow.exception.PlanetNotFoundException;
 import br.com.btwow.model.Planet;
-import br.com.btwow.repository.PlanetRepository;
 import br.com.btwow.service.impl.FindPlanetServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
-public class FindPlanetServiceTest {
+public class FindPlanetServiceTest extends CommonPlanetTest<FindPlanetService>{
 
-  @Mock
-  private PlanetRepository planetRepository;
-
-  @InjectMocks
-  private FindPlanetService findPlanetService = new FindPlanetServiceImpl();
-
-
-  @Test
-  public void testIfSearchByIdReturnPlanet() {
-
-    mockPlanetResult(Optional.of(getPlanet()));
-
-    Assertions.assertEquals(getPlanet(), findPlanetService.executeById("test0101010").get());
-
+  @BeforeEach
+  public void setup(){
+    this.service = new FindPlanetServiceImpl(repository, planetsApiSearch);
   }
 
   @Test
-  public void testIfSearchByIdReturnNoPlanet() {
+  public void testFindById() {
 
-    mockPlanetResult(Optional.empty());
+    Planet planet = getPlanet();
+    PlanetDto planetDto = getPlanetDto();
 
-    Assertions.assertEquals(Optional.empty(), findPlanetService.executeById("test0101010"));
+    when(repository.findById(anyString())).thenReturn(Optional.of(planet));
+    modelMapperMock(planet, planetDto);
+    Assertions.assertEquals(getPlanetDtoWithFilms(), service.executeById("test"));
   }
 
   @Test
-  public void testIfSearchByNameReturnPlanet() {
+  public void testFindByIdNotFound() {
 
-    mockPlanetResult(List.of(getPlanet()));
-
-    Assertions.assertEquals(List.of(getPlanet()), findPlanetService.executeByName("Tatooine"));
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> {
+      when(repository.findById(anyString())).thenReturn(Optional.empty());
+      service.executeById("test");
+    });
   }
 
   @Test
-  public void testIfSearchByNameReturnNoPlanet() {
+  public void testFindByName() {
 
-    mockPlanetResult(Collections.emptyList());
+    Planet planet = getPlanet();
+    PlanetDto planetDto = getPlanetDto();
+    modelMapperMock(planet, planetDto);
 
-    Assertions.assertEquals(Collections.emptyList(), findPlanetService.executeByName("Tatooine"));
+    Page<Planet> page = new PageImpl<>(List.of(planet, planet));
+
+    when(repository.findByNameIgnoreCase(anyString(), any(Pageable.class))).thenReturn(page);
+
+    Assertions.assertEquals(
+            List.of(getPlanetDtoWithFilms(), getPlanetDtoWithFilms()), service.executeByName("test", 0,2));
+
+    page = new PageImpl<>(Collections.singletonList(planet));
+
+    when(repository.findByNameIgnoreCase(anyString(), any(Pageable.class))).thenReturn(page);
+
+    Assertions.assertEquals(Collections.singletonList(getPlanetDtoWithFilms()), service.executeByName("test",0,1));
   }
 
-  private void mockPlanetResult(Optional<Planet> planet) {
-    Mockito.when(planetRepository.findById(Mockito.anyString())).thenReturn(planet);
-  }
-
-  private void mockPlanetResult(List<Planet> planet) {
-    Mockito.when(planetRepository.findByNameIgnoreCase(Mockito.anyString())).thenReturn(planet);
-  }
-
-  private Planet getPlanet() {
-    Planet planet = new Planet();
-    planet.setId("test0101010");
-    planet.setName("Tatooine");
-    planet.setClimate("test");
-    planet.setTerrain("test");
-    return planet;
+  @Test
+  public void testFindByNameNotFound() {
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> {
+      when(repository.findByNameIgnoreCase(anyString(), any(Pageable.class))).thenReturn(Page.empty());
+      service.executeByName("test", 0, 1);
+    });
   }
 
 }

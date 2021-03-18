@@ -23,6 +23,4 @@ public class Planet {
 
     @NotBlank(message = "Climate must not be blank")
     private String climate;
-
-    private long films = 0;
 }

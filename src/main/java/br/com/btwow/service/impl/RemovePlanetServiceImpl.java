@@ -1,32 +1,27 @@
 package br.com.btwow.service.impl;
 
-import br.com.btwow.model.Planet;
 import br.com.btwow.repository.PlanetRepository;
+import br.com.btwow.service.FindPlanetService;
 import br.com.btwow.service.RemovePlanetService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class RemovePlanetServiceImpl implements RemovePlanetService {
 
   @Autowired
   private PlanetRepository repository;
 
   @Autowired
-  private FindPlanetServiceImpl findPlanetService;
+  private FindPlanetService findPlanetService;
 
   @Override
-  public boolean execute(String planetId) {
-
-    Optional<Planet> planet = findPlanetService.executeById(planetId);
-
-    if (planet.isPresent()) {
-      repository.deleteById(planetId);
-      return true;
-    }
-
-    return false;
+  public void execute(String planetId) {
+    findPlanetService.executeById(planetId);
+    repository.deleteById(planetId);
   }
 }

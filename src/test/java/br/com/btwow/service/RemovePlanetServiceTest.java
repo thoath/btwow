@@ -1,46 +1,41 @@
 package br.com.btwow.service;
 
-import br.com.btwow.model.Planet;
-import br.com.btwow.repository.PlanetRepository;
+import static org.mockito.Mockito.*;
+
+import br.com.btwow.exception.PlanetNotFoundException;
 import br.com.btwow.service.impl.FindPlanetServiceImpl;
 import br.com.btwow.service.impl.RemovePlanetServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 @SpringBootTest
-public class RemovePlanetServiceTest {
+public class RemovePlanetServiceTest extends CommonPlanetTest<RemovePlanetService>{
 
-  @Mock
-  private PlanetRepository planetRepository;
-
-  @Mock
-  private FindPlanetServiceImpl findPlanetService;
-
-  @InjectMocks
-  private RemovePlanetService removePlanetService =  new RemovePlanetServiceImpl();
-
-  @Test
-  public void testIfDeletesWithSuccess() {
-
-    getMockedService(Optional.of(new Planet()));
-
-    Assertions.assertTrue(removePlanetService.execute("teste0101010"));
+  @BeforeEach
+  public void setup(){
+    this.service = new RemovePlanetServiceImpl(repository, new FindPlanetServiceImpl(repository, planetsApiSearch));
   }
 
   @Test
-  public void testIfNoPlanetFound() {
+  public void testRemoveWithExistentId(){
 
-    getMockedService(Optional.empty());
-    Assertions.assertFalse(removePlanetService.execute("teste0101010"));
+    modelMapperMock(getPlanet(), getPlanetDto());
+    when(repository.findById(anyString())).thenReturn(Optional.of(getPlanet()));
+
+    service.execute("test");
   }
 
-  private void getMockedService(Optional<Planet> planet) {
-    Mockito.when(findPlanetService.executeById(Mockito.anyString())).thenReturn(planet);
+  @Test
+  public void testRemoveWithNonExistentId(){
+
+    when(repository.findById(anyString())).thenReturn(Optional.empty());
+
+    Assertions.assertThrows(PlanetNotFoundException.class, () -> {
+      service.execute("test");
+    });
   }
 }

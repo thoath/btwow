@@ -19,9 +19,8 @@ public class PlanetServiceExceptionImpl {
             .body(exc.getFieldErrors().stream().map(FieldError::getDefaultMessage).collect(Collectors.toList()));
   }
 
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<Exception> handleException(Exception exc) {
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exc);
+  @ExceptionHandler(PlanetNotFoundException.class)
+  public ResponseEntity handlePlanetNotFoundException(PlanetNotFoundException ex) {
+    return ResponseEntity.notFound().build();
   }
-
 }

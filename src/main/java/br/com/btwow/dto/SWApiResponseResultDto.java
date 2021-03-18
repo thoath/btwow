@@ -13,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class SWApiResponseResultDto {
 
+  private String name;
   private List<String> films;
 }

@@ -2,5 +2,5 @@ package br.com.btwow.service;
 
 public interface RemovePlanetService {
 
-  boolean execute(String planetId);
+  void execute(String planetId);
 }

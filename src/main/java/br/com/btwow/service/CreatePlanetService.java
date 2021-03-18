@@ -1,8 +1,8 @@
 package br.com.btwow.service;
 
-import br.com.btwow.model.Planet;
+import br.com.btwow.dto.PlanetDto;
 
 public interface CreatePlanetService {
 
-    Planet execute(Planet planet);
+    PlanetDto execute(PlanetDto planet);
 }
