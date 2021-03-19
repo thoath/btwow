@@ -16,20 +16,17 @@ import org.springframework.stereotype.Service;
 @NoArgsConstructor
 public class CreatePlanetServiceImpl implements CreatePlanetService {
 
-    @Autowired
-    private PlanetRepository repository;
+  @Autowired private PlanetRepository repository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+  @Autowired private ModelMapper modelMapper;
 
-    @Autowired
-    private SWPlanetsApiSearch planetsApiSearch;
+  @Autowired private SWPlanetsApiSearch planetsApiSearch;
 
-    @Override
-    public PlanetDto execute(PlanetDto planet) {
+  @Override
+  public PlanetDto execute(PlanetDto planet) {
 
-      Planet planetModel = modelMapper.map(planet, Planet.class);
+    Planet planetModel = modelMapper.map(planet, Planet.class);
 
-      return planetsApiSearch.modelPlanetDto(repository.save(planetModel));
-    }
+    return planetsApiSearch.modelPlanetDto(repository.save(planetModel));
+  }
 }

@@ -4,5 +4,5 @@ import br.com.btwow.dto.PlanetDto;
 
 public interface CreatePlanetService {
 
-    PlanetDto execute(PlanetDto planet);
+  PlanetDto execute(PlanetDto planet);
 }

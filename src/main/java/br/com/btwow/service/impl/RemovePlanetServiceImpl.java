@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class RemovePlanetServiceImpl implements RemovePlanetService {
 
-  @Autowired
-  private PlanetRepository repository;
+  @Autowired private PlanetRepository repository;
 
-  @Autowired
-  private FindPlanetService findPlanetService;
+  @Autowired private FindPlanetService findPlanetService;
 
   @Override
   public void execute(String planetId) {

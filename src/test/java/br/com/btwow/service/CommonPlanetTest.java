@@ -1,6 +1,7 @@
 package br.com.btwow.service;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 import br.com.btwow.api.SWPlanetsApiClient;
 import br.com.btwow.api.SWPlanetsApiSearch;
@@ -9,31 +10,27 @@ import br.com.btwow.dto.SWApiResponseDto;
 import br.com.btwow.dto.SWApiResponseResultDto;
 import br.com.btwow.model.Planet;
 import br.com.btwow.repository.PlanetRepository;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 public abstract class CommonPlanetTest<E> {
 
-  @Mock
-  protected ModelMapper modelMapper;
+  @Mock protected ModelMapper modelMapper;
 
-  @Mock
-  protected SWPlanetsApiClient api;
+  @Mock protected SWPlanetsApiClient api;
 
-  @Mock
-  protected PlanetRepository repository;
+  @Mock protected PlanetRepository repository;
 
   protected E service;
 
   protected SWPlanetsApiSearch planetsApiSearch;
 
   @BeforeEach
-  public void setupCommon(){
+  public void setupCommon() {
     this.planetsApiSearch = new SWPlanetsApiSearch(api, modelMapper);
     when(api.getPlanet(anyString())).thenReturn(Optional.of(getApiResponse()));
   }
@@ -43,18 +40,16 @@ public abstract class CommonPlanetTest<E> {
     when(modelMapper.map(planet, PlanetDto.class)).thenReturn(planetDto);
   }
 
-
   protected SWApiResponseDto getApiResponse() {
 
     SWApiResponseDto response = new SWApiResponseDto();
     response.setResponseResultDto(
-            List.of(
-                    new SWApiResponseResultDto("tes", Collections.emptyList()),
-                    new SWApiResponseResultDto("test",List.of("test01", "test01"))));
+        List.of(
+            new SWApiResponseResultDto("tes", Collections.emptyList()),
+            new SWApiResponseResultDto("test", List.of("test01", "test01"))));
 
     return response;
   }
-
 
   protected Planet getPlanet() {
     Planet planet = new Planet();

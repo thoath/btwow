@@ -8,8 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 public class BtwowApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BtwowApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(BtwowApplication.class, args);
+  }
 }

@@ -5,4 +5,4 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PlanetNotFoundException extends RuntimeException{}
+public class PlanetNotFoundException extends RuntimeException {}

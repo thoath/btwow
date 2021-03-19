@@ -13,22 +13,17 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class SWPlanetsApiSearch {
 
-  @Autowired
-  private SWPlanetsApiClient api;
+  @Autowired private SWPlanetsApiClient api;
 
-  @Autowired
-  private ModelMapper modelMapper;
-
+  @Autowired private ModelMapper modelMapper;
 
   private long getFilmCount(String planetName) {
 
-    return api
-      .getPlanet(planetName)
-      .stream()
-      .flatMap(result -> result.getResponseResultDto().stream())
-      .filter(result -> result.getName().equals(planetName))
-      .mapToLong(result -> result.getFilms().stream().count())
-      .sum();
+    return api.getPlanet(planetName).stream()
+        .flatMap(result -> result.getResponseResultDto().stream())
+        .filter(result -> result.getName().equals(planetName))
+        .mapToLong(result -> result.getFilms().stream().count())
+        .sum();
   }
 
   public PlanetDto modelPlanetDto(Planet planet) {

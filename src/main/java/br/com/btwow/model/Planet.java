@@ -1,10 +1,11 @@
 package br.com.btwow.model;
 
-import lombok.*;
+import javax.validation.constraints.NotBlank;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.NotBlank;
 
 @Document
 @Getter
@@ -12,15 +13,14 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 public class Planet {
 
-    @Id
-    private String id;
+  @Id private String id;
 
-    @NotBlank(message = "Name must not be blank")
-    private String name;
+  @NotBlank(message = "Name must not be blank")
+  private String name;
 
-    @NotBlank(message = "Terrain must not be blank")
-    private String terrain;
+  @NotBlank(message = "Terrain must not be blank")
+  private String terrain;
 
-    @NotBlank(message = "Climate must not be blank")
-    private String climate;
+  @NotBlank(message = "Climate must not be blank")
+  private String climate;
 }
