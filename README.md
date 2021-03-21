@@ -5,7 +5,7 @@
  - Access to internet(Mongo Atlas)
  
 #Swagger
-http://localhost:8081/swagger-ui.html#/create-planet-controller/createPlanetUsingPOST
+http://localhost:8081/swagger-ui.html#
 
 #Steps to follow
  - Clone the repository
